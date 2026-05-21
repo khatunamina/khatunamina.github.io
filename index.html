@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mst. Amina Khatun - Researcher & Engineer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #0f172a;
+            --light: #f1f5f9;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--dark);
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            margin: 0 auto 2rem;
+            object-fit: cover;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            color: var(--light);
+            margin-bottom: 2rem;
+            min-height: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--dark);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: white;
+        }
+
+        .section-light {
+            background: var(--light);
+            color: var(--text);
+        }
+
+        .section-light .section-title {
+            color: var(--text);
+        }
+
+        .about-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .skill-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .gallery {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+.gallery img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.gallery img.active { opacity: 1; }
+.gallery-nav {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  pointer-events: none;
+}
+.gallery-btn {
+  pointer-events: all;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+}
+.gallery-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.dot.active { background: #fff; }
+.img-count {
+  position: absolute;
+  top: 8px; right: 10px;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .project-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        .project-links {
+            margin-top: 1rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .project-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* ── RESEARCH SECTIONS ── */
+        .research-section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .research-section-label h3 {
+            font-size: 1.6rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .research-badge {
+            padding: 0.4rem 1.1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-conference {
+            background: rgba(236, 72, 153, 0.18);
+            border: 2px solid #ec4899;
+            color: #f9a8d4;
+        }
+
+        .badge-journal {
+            background: rgba(250, 204, 21, 0.15);
+            border: 2px solid #facc15;
+            color: #fde68a;
+        }
+
+        .research-divider {
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            margin-bottom: 2rem;
+            border-radius: 2px;
+        }
+
+        .research-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .research-card.conference-card {
+            border-left-color: #ec4899;
+        }
+
+        .research-card.journal-card {
+            border-left-color: #facc15;
+        }
+
+        .research-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .research-card .project-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .research-card.conference-card .project-header {
+            background: linear-gradient(135deg, #be185d, #ec4899);
+        }
+
+        .research-card.journal-card .project-header {
+            background: linear-gradient(135deg, #b45309, #f59e0b);
+        }
+
+        /* ── TIMELINE ── */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            width: calc(50% - 2rem);
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .contact-card a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-card a:hover {
+            color: var(--primary);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .typing-text { font-size: 1.2rem; }
+            .timeline::before { left: 0; }
+            .timeline-item { width: 100%; margin-left: 2rem; }
+            .timeline-item:nth-child(odd) { margin-left: 2rem; }
+            .certificates-grid { grid-template-columns: 1fr; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            transform: scale(1.2) rotate(360deg);
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .certificate-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .cert-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .certificate-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .cert-role {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .cert-link {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .cert-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .cert-card-image {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .cert-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .cert-info {
+            padding: 1.5rem;
+        }
+
+        /* ── PROJECT IMAGE THUMBNAIL ── */
+        .project-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            background: var(--light);
+        }
+
+        .project-thumb-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #e0e7ff, #ede9fe);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2.5rem;
+            cursor: pointer;
+            border: 2px dashed var(--primary);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-thumb-placeholder:hover {
+            background: linear-gradient(135deg, #c7d2fe, #ddd6fe);
+        }
+
+        .project-thumb-placeholder .upload-label {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-top: 0.4rem;
+            font-weight: 600;
+        }
+
+        .project-thumb-placeholder input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── CERTIFICATE MODAL ── */
+        .cert-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .cert-modal-overlay.active {
+            display: flex;
+        }
+
+        .cert-modal-box {
+            background: white;
+            border-radius: 16px;
+            max-width: 820px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+
+        .cert-modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cert-modal-header h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .cert-modal-close {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f1f5f9;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .cert-modal-close:hover { background: #e2e8f0; }
+
+        .cert-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .cert-modal-body img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .cert-modal-body iframe {
+            width: 100%;
+            height: 60vh;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .cert-modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* ── CERT UPLOAD ZONE ── */
+        .cert-upload-zone {
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .cert-upload-zone:hover {
+            background: linear-gradient(135deg, #e0e7ff, #ede9fe);
+            transform: scale(1.01);
+        }
+
+        .cert-upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cert-upload-zone .upload-icon { font-size: 2rem; }
+        .cert-upload-zone .upload-text {
+            font-size: 0.82rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+        .cert-upload-zone .upload-sub {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .cert-preview-thumb {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .cert-view-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .cert-view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99,102,241,0.4);
+        }
+
+        /* Presentation cards */
+        .pres-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .pres-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .pres-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(99,102,241,0.3);
+        }
+
+        .pres-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .pres-card .pres-type {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .pres-card p {
+            color: #555;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .pres-card .pres-date {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.25rem 0.8rem;
+            background: var(--light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <nav id="navbar">
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#presentations">Presentations</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section id="hero">
+        <div class="hero-content">
+            <img src="E:\Amina's portfolio\amina_portfolio\Amina2.jpeg" alt="Mst. Amina Khatun" class="profile-image" id="profileImg">
+            <h1>Mst. Amina Khatun</h1>
+            <div class="typing-text" id="typingText"></div>
+            <p style="color: var(--light); font-size: 1.1rem; margin-bottom: 2rem;">
+                Research Assistant | Student Of Daffodil International University | Department of Computing and Information System 
+            </p>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn btn-primary">Get In Touch</a>
+                <a href="#research" class="btn btn-outline">View Research</a>
+                <a href="CV_of_Amina khatun_Academic.pdf" download target="_blank" class="btn btn-outline"> Download CV </a>
+            </div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/amina-khatun-ba573a374/" target="_blank" class="social-link" title="LinkedIn">💼</a>
+                <a href="https://orcid.org/0009-0007-4071-7005" target="_blank" class="social-link" title="ORCID">🆔</a>
+                <a href="mailto:amina2312091018@diu.edu.bd" class="social-link" title="Email"> ✉️ </a>
+                
+            </div>
+            <div class="scroll-indicator">
+                <div style="color: white; font-size: 2rem;">↓</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ABOUT ── -->
+    <section id="about" class="section-light">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <p>
+                   Greetings! This is Mst. Amina Khatun. I am a final-year B.Sc. student majoring in IoT and AI under the Computing and Information Systems program at Daffodil International University, Savar, Dhaka, with a current CGPA of 3.94. My academic journey is driven by a passion for building intelligent systems and conducting meaningful research.
+
+
+                I have worked on several real-world projects including a DIU Accounts Management System, DIU Vehicle System Automation, an AI Fest Website, and Database Management systems — strengthening my skills in development, automation, and system design.
+
+
+                My research interest lies in Bioinformatics and Machine Learning — exploring how AI can unlock insights from biological data. My long-term goal is to work at the intersection of research and technology, contributing to impactful innovations in computing and AI.
+                </p>
+               
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SKILLS ── -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>💻 Programming Languages</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Python</span>
+                         <span class="tag">JAVA</span>
+                        <span class="tag">Springboot</span>
+                        <span class="tag">php</span>
+                        <span class="tag">R</span>
+                        <span class="tag">C++</span>
+                        <span class="tag">SQL</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3>🧠 AI / Machine Learning</h3>
+                    <div class="skill-tags">
+                        <span class="tag">PyTorch</span>
+                        <span class="tag">TensorFlow</span>
+                        <span class="tag">Scikit-learn</span>
+                        <span class="tag">Deep Learning</span>
+                        <span class="tag">YOLOV8</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3>📊 Data Science</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Pandas</span>
+                        <span class="tag">NumPy</span>
+                        <span class="tag">Matplotlib</span>
+                        <span class="tag">Seaborn</span>
+                        <span class="tag">Jupyter</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3>🔬 Research Tools</h3>
+                    <div class="skill-tags">
+                        <span class="tag">LaTeX</span>
+                        <span class="tag">Overleaf</span>
+                        <span class="tag">Cytoscape</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3>🛠️ Tools & DevOps</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Linux</span>
+                        <span class="tag">VS Code</span>
+                        <span class="tag">Google Colab</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3>🌐 Web & Misc</h3>
+                    <div class="skill-tags">
+                        <span class="tag">HTML/CSS</span>
+                        <span class="tag">REST API</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">Oracle</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── EXPERIENCE ── -->
+    <section id="experience" class="section-light">
+        <div class="container">
+            <h2 class="section-title">Experience &amp; Education</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3 style="color: var(--primary);">🎓 Daffodil International University — Computing and Information System </h3>
+                    <p style="color: #666; margin: 0.5rem 0;">[Bachelor of science] | [ July-2023] – [expected  June-2027] | CGPA:3.94 / 4.00</p>
+                    <p>Pursuing Bsc in computing and information system at DIU. I have completed advanced coursework spanning Database Management Systems, Algorithms, Web Engineering, Software Engineering, Computer Networks, Network Security & Cryptography, Electronics Circuit Design, Object-Oriented Programming in Java, Artificial Intelligence, and Machine Learning and more. Research supervised by MD FARUK HOSEN sir.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 style="color: var(--primary);">🔬 Research Assistant — [Daffodil International University]</h3>
+                    <p style="color: #666; margin: 0.5rem 0;">[savar] | [2025-present]</p>
+                    <p>My research interest lies in leveraging Machine Learning techniques to solve complex problems in Bioinformatics. Responsibilities include data collection, model development, paper writing, and experimental validation.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 style="color: var(--primary);">🏫 [Khulna Govt. Girls College]</h3>
+                    <p style="color: #666; margin: 0.5rem 0;">[HSC-Science] | [December-2021]</p>
+                    <p>Completed HSC from Khulna Govt. Girls College with GPA of 5.00 . Major subjects include Biology.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 style="color: var(--primary);">🏫[Kumira M.L High school]</h3>
+                    <p style="color: #666; margin: 0.5rem 0;">[SSC-Science] | [2019]</p>
+                    <p>Completed SSC from Kumira M.L High school with GPA of 5.00 . Major subjects include Higher Mathematics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PROJECTS ── -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+
+                <!-- PROJECT 1 -->
+                <div class="project-card">
+
+    <div class="gallery" id="gallery-1">
+    <img src="project ss/DCMS1.png" alt="Project screenshot 1" class="active">
+    <img src="project ss/DCMS2.png" alt="Project screenshot 2">
+    <img src="project ss/DCMS3.png" alt="Project screenshot 3">
+    
+    <div class="img-count" id="count-1">1 / 3</div>
+    <div class="gallery-nav">
+     <button class="gallery-btn" onclick="changeSlide('gallery-1', -1)">&#8249;</button>
+     <button class="gallery-btn" onclick="changeSlide('gallery-1', 1)">&#8250;</button>
+    </div>
+    <div class="gallery-dots" id="dots-1"></div>
+    </div>
+    <div class="project-header">
+                        <h3>🤖 Diu clearance management system </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality: A secure university portal where students pay dues via bKash/Visa, track 5 types of clearance, generate tamper-proof QR badges for hall entry, and get AI-powered account assistance ,all protected by real-time fraud detection.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">php</span>
+                            <span class="tech-tag">Rest API</span>
+                            <span class="tech-tag">Html</Html></span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">JS</span>
+                            <span class="tech-tag">MySQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2 -->
+                <div class="project-card">
+
+  <!-- IMAGE GALLERY — এখানে তোমার ছবির path বসাও -->
+    <div class="gallery" id="gallery-2">
+    <img src="project ss/vehicle1.png" alt="Project screenshot 1" class="active">
+    <img src="project ss/vehicle2.png" alt="Project screenshot 2">
+    <img src="project ss/vehicle3.png" alt="Project screenshot 3">
+    
+    <div class="img-count" id="count-2">1 / 3</div>
+    <div class="gallery-nav">
+     <button class="gallery-btn" onclick="changeSlide('gallery-2', -1)">&#8249;</button>
+     <button class="gallery-btn" onclick="changeSlide('gallery-2', 1)">&#8250;</button>
+    </div>
+    <div class="gallery-dots" id="dots-2"></div>
+    </div>
+    <div class="project-header">
+                        <h3>🤖 DIU Vehicle Management System </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality:vehicle record management, driver information handling, trip scheduling, data tracking, and
+                        automated administrative operations</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Linux</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- PROJECT 3 -->
+                 <div class="project-card">
+
+    <div class="gallery" id="gallery-3">
+    <img src="project ss/AiFest1.png" alt="Project screenshot 1" class="active">
+    <img src="project ss/AiFest2.png" alt="Project screenshot 2">
+    <img src="project ss/AiFest3.png" alt="Project screenshot 3">
+    
+    <div class="img-count" id="count-3">1 / 3</div>
+    <div class="gallery-nav">
+     <button class="gallery-btn" onclick="changeSlide('gallery-3', -1)">&#8249;</button>
+     <button class="gallery-btn" onclick="changeSlide('gallery-3', 1)">&#8250;</button>
+    </div>
+    <div class="gallery-dots" id="dots-3"></div>
+    </div>
+    <div class="project-header">
+                        <h3>🤖 AI fest 2026 </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality: Featuring event registration, participant management, schedule updates, announcements, and
+interactive user-friendly navigation.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">php</span>
+                            <span class="tech-tag">Rest API</span>
+                            <span class="tech-tag">Html</span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">JS</span>
+                            <span class="tech-tag">MySQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 4 -->
+                 <div class="project-card">
+
+    <div class="gallery" id="gallery-4">
+    <img src="project ss/CN1.png" alt="Project screenshot 1" class="active">
+    </div>
+
+    <div class="project-header">
+                        <h3>🤖DIU Campus Networking </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality: Implementing VLANs, routing, switching, IP addressing, subnetting, and network security
+configurations.VLANs, DHCP, RIPv2, Static Routing</p>
+                        <div class="project-tech">
+                            <span class="tech-tag"> Cisco Packet Tracer</span>
+                            <span class="tech-tag">VLANs</span>
+                            <span class="tech-tag">DHCP</span>
+                            <span class="tech-tag">RIPv2</span>
+                            <span class="tech-tag">Static Routing</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 5 -->
+                <div class="project-card">
+
+    <div class="gallery" id="gallery-5">
+    <img src="project ss/CMS1.png" alt="Project screenshot 1" class="active">
+    <img src="project ss/CMS2.png" alt="Project screenshot 2">
+    <img src="project ss/CMS3.png" alt="Project screenshot 3">
+    
+    <div class="img-count" id="count-5">1 / 3</div>
+    <div class="gallery-nav">
+     <button class="gallery-btn" onclick="changeSlide('gallery-5', -1)">&#8249;</button>
+     <button class="gallery-btn" onclick="changeSlide('gallery-5', 1)">&#8250;</button>
+    </div>
+    <div class="gallery-dots" id="dots-5"></div>
+    </div>
+    <div class="project-header">
+                        <h3>🤖 DIU clearance management system 2.0 </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality:A secure university portal where students pay dues via bKash/Visa, track 5 types of clearance
+easily.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Spring Boot</span>
+                            <span class="tech-tag">ThymeLeaf</span>
+                            <span class="tech-tag">data JPA</span>
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">MySQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 6 -->
+                <div class="project-card">
+
+    <div class="gallery" id="gallery-6">
+    <img src="project ss/Ai1.png" alt="Project screenshot 1" class="active">
+    <img src="project ss/Ai2.png" alt="Project screenshot 2">
+    <img src="project ss/Ai3.png" alt="Project screenshot 3">
+    <img src="project ss/Ai4.png" alt="Project screenshot 4">
+    
+    <div class="img-count" id="count-6">1 / 4</div>
+    <div class="gallery-nav">
+     <button class="gallery-btn" onclick="changeSlide('gallery-6', -1)">&#8249;</button>
+     <button class="gallery-btn" onclick="changeSlide('gallery-6', 1)">&#8250;</button>
+    </div>
+    <div class="gallery-dots" id="dots-6"></div>
+    </div>
+    <div class="project-header">
+                        <h3>🤖 Face Detection model </h3>
+                    </div>
+                    <div class="project-body">
+                        <p>Functionality: Enabling real-time face detection from images or webcam input with automated face recognition,
+detection bounding boxes, and user-friendly web interface for interactive use.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag"> Streamlit</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="project-link">📂 GitHub Repo</a>
+                        </div>
+                    </div>
+                </div>
+    </section>
+
+    <!-- ── RESEARCH ── -->
+    <section id="research" class="section-light">
+        <div class="container">
+            <h2 class="section-title">Research &amp; Publications</h2>
+
+            <!-- CONFERENCE PAPERS -->
+            <div class="research-section-label">
+                <span class="research-badge badge-conference">📢 Conference Papers</span>
+                <h3>International Conferences</h3>
+            </div>
+            <div class="research-divider" style="background: linear-gradient(90deg,#ec4899,transparent);"></div>
+
+            <div class="research-card conference-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#cb487d,#c391aa);">
+                    <h3>📄1. Exploring Biomarkers and Pathways in Preeclampsia and Cardiovascular Diseases: A Bioinformatics and Machine Learning Approach  </h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong>Mst. Amina Khatun; Md. Faruk Hosen; Mohammad Sarwar Hossain Mollah; Muhammad Shahin Uddin; Monir Morshed</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Conference Location:</strong>  Kushtia, Bangladesh</p>
+                    <p style="margin-top:0.5rem; color:#555;">Preeclampsia (PE) is a life-threatening obstetric disorder that can lead to significant gestational and fetal morbidity and mortality. Recent studies indicate that individuals with a history of PE are at an elevated risk of developing cardiovascular diseases (CVDs) later in life. Despite the clinical association between PE and CVDs, the shared molecular mechanisms and regulatory genes underlying these conditions remain insufficiently characterized.
+                         Through this study, we focused on elucidate the concordant molecular pathways and endowment therapeutic targets implicated in both PE and CVDs to enhance early detection and intervention strategies. An integrative systems biology framework, combined with machine learning techniques, was applied to determine key Differentially expressed genes (DEGs) from transcriptomic data. Functional enrichment was conducted using Gene Ontology (GO) and pathway analysis to uncover biological processes and signaling cascades.
+                          Hub genes were identified by building protein–protein interaction (PPI) networks. Additionally, transcription factor (TF)-gene and microRNA (miRNA)-gene regulatory networks were explored to highlight upstream regulatory elements.
+                         Finally, computational drug analysis revealed potential therapeutic compounds targeting both conditions, which may function as dual-purpose agents for treatment and serve as prognostic biomarkers for cardiovascular risk assessment in women previously diagnosed with preeclampsia.</p>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🔗 https://doi.org/10.1109/COMPAS67506.2025.11381783</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="research-card conference-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#d194ad,#ec4899);">
+                    <h3>📄2.Leveraging Machine Learning to Uncover Molecular Pathways and Candidate Drugs in Ovarian Cancer and Polycystic Ovary Syndrome </h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong>Francis Rudra D Cruze; Amina Khatun; Md. Faruk Hosen; Mohammad Sarwar Hossain Mollah; Md Nasimul Kader; Muhammad Shahin Uddin</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Conference Location:</strong>  Chittagong, Bangladesh</p>
+                    <p style="margin-top:0.5rem; color:#555;">Ovarian cancer (OC) and polycystic ovary syndrome (PCOS) significantly impact the lives of millions of women worldwide. PCOS affects 8-13% of women of reproductive age, while OC is regarded as the deadliest form of gynecological cancer.
+                         Their impacts are enormous, yet the molecular links between these two diseases are not well defined. This study tries to explore this important knowledge gap using an integrated bioinformatics approach to unravel common genetic signatures and potential therapeutic candidates for PCOS and OC. We used differential gene expression (DEGs) analysis, protein-protein interaction (PPI) networks, pathway enrichment analysis, and regulatory network analysis on two microarray datasets.
+                         Utilizing the sophisticated machine learning approach known as minimum redundancy maximum relevance (mRMR), we detected 24 genes that exhibited differential expression across both conditions. Analysis of the PPI network highlighted ten prominent hub genes - GIGYF2, FGB, ZEB2, S100P, TNFRSF10C, CP, LMAN2, RAPH1, UBC, and KDM4D - which are presumably integral to the molecular interactions between PCOS and OC. Functional enrichment analysis identified significant biological pathways; the regulatory network analysis revealed complex TFs, miRNAs, and DEGs interactions.
+                          More importantly, we have predicted potential therapeutic compounds apigenin and sirolimus targeting the shared DEGs. These results provide a crucial clue toward the possible molecular underlying mechanisms of PCOS and OC for further therapeutic and diagnostic interventions. The present study is epitomizing the effectiveness of integrating different bioinformatic approaches to uncover complex disease mechanisms and guide further investigational efforts in the field of women's health.</p>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">https://doi.org/10.1109/ECCE64574.2025.11013839</a>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-card conference-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#c19aaa,#ec4899);">
+                    <h3>📄3. A Machine Learning and Bioinformatics Approach for Identifying Key Biomarkers in Bipolar Disorder and Schizophrenia </h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong> Mst. Mostary Khatun, Tanvir Hasan,Mst. Amina Khatun,Md. Faruk Hosen,Monir Morshed</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Venue:</strong> 11th IEEE International Women in Engineering (WIE) Conference on Electrical and Computer Engineering 2026 (IEEE WIECON-ECE 2026) at Long Beach Hotel, Cox’s Bazar, Bangladesh.</p>
+                    <p style="margin-top:0.5rem; color:#555;">Bipolar disorder (BD) and schizophrenia (SCZ) are
+serious psychiatric conditions that share similar clinical charac
+teristics and genetic predispositions. Nevertheless, the fundamen
+tal molecular mechanisms linking these disorders have not been
+fully explored. This research seeks to clarify the common molec
+ular pathways and potential therapeutic targets in BD and SCZ
+by employing an integrated bioinformatics and machine learning
+methodology. Gene expression datasets were sourced from public
+databases, and an analysis of differential gene expression was
+performed using the Limma package. A feature selection method
+based on filtering, specifically Fisher Score, was utilized to
+pinpoint the most significant genes common to both disorders. We
+detected 30 shared differentially expressed genes (DEGs) in BD
+and SCZ. Functional enrichment analysis through Gene Ontology
+(GO) demonstrated a significant connection to mitochondrial ac
+tivity and cellular respiration. KEGG pathway analysis addition
+ally indicated links to oxidative phosphorylation and pathways
+associated with neurodegenerative diseases. The development
+and clustering of the protein–protein interaction (PPI) network
+revealed five pivotal hub genes—NDUFS2, NDUFB2, UQCRQ,
+COX7C, and NDUFA13—all of which are integral components of
+the mitochondrial respiratory chain, implying a shared metabolic
+dysfunction in both conditions. Furthermore, regulatory network
+analysis revealed complex interactions involving transcription
+factors (TFs), microRNAs (miRNAs), and the common DEGs,
+highlighting intricate gene regulatory mechanisms. Predictive
+drug analysis pinpointed potential therapeutic agents aimed at
+these common molecular signatures. In summary, our results
+offer new insights into the shared biological foundations of BD
+and SCZ, providing encouraging pathways for future diagnostic
+and therapeutic approaches.</p>
+                   
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🔗 DOI / Paper Link</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-card conference-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#c0889f,#ec4899);">
+                    <h3>📄4. Enhanced Prediction of Interleukin-13 Inducing Peptides Using Sequence Embedding and CNN Classifier </h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong>M. A. Murad, Sanjida Akter, Mst. Amina Khatun,
+Md. Faruk Hosen, and Md Nasimul Kader</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Venue:</strong> 11th IEEE International Women in Engineering (WIE) Conference on Electrical and Computer Engineering 2026 (IEEE WIECON-ECE 2026) at Long Beach Hotel, Cox’s Bazar, Bangladesh.</p>
+                    <p style="margin-top:0.5rem; color:#555;">Interleukin-13 (IL-13), a cytokine produced by im
+mune cells, is crucial in allergic disease pathogenesis, contributing
+to conditions such as asthma with effects on airway hyper
+responsiveness, mucus production and obstruction.It’s linked
+to suppressing immune surveillance, potentially aiding cancer
+development. The ability to predict IL-13 inducing peptides is
+crucial for safe design of protein-based therapeutics, especially
+in immuno therapy field.However, Experimental identification
+is time-consuming and costly, so it’s necessary to construct
+effective predictors. This paper introduces a novel predictor
+called IL-13-DeepEmbed, which is developed to accurately
+predict IL-13 inducing peptides from sequences employing a
+convolution neural network (CNN) architecture. Firstly, we
+perform Word2Vec, GloVe and fastText feature extraction meth
+ods. Applying the FastText dataset, CNN attains a maximum
+AUC value of 0.6228.Secondly, The Adaptive Synthetic Sam
+pling Approach(ADASYN) is applied in fasttext unbalanced
+datasets.Then, SHapley Additive exPlanations(SHAP) is applied
+to eliminate unnecessary and inconsistent features. Finally, the
+significant features are fed into the CNN classifier to build
+the IL-13-DeepEmbed architecture, resulting in 0.9649 as AUC
+value. The result demonstrates, IL-13-DeepEmbed surpasses
+traditional methods in inducing IL-13, providing novel insights
+for identifying IL-13-inducing peptides.</p>
+                    
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🔗</a>
+                    </div>
+                </div>
+            </div>
+
+             <div class="research-card conference-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#bc94a5,#ec4899);">
+                    <h3>📄5.Gastric Cancer Classification Using a Hybrid CNN-Attention-LSTM Model with Deep Feature Extraction.  </h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong>Md. Faruk Hosen, Mst. Amina Khatun,Md. Suhag Ali,Md. Shakil Ahmed,Sazia Sharmin,Muhammad Shahin Uddin</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Venue:</strong> 2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence, and Networking (QPAIN)
+16– 18 April 2026, Chittagong, Bangladesh</p>
+                    <p style="margin-top:0.5rem; color:#555;">Gastric cancer (GC) ranks as the fifth most preva
+lent malignancy worldwide, and its early detection is crucial
+for reducing mortality. The current clinical gold standard re
+lies on histopathological image examination, which despite its
+diagnostic reliability remains manual, labor-intensive, and time
+consuming. Consequently, there has been increasing interest
+in computer-aided diagnostic (CAD) systems to assist pathol
+ogists in decision-making. Although deep learning approaches
+have demonstrated considerable potential, conventional models
+often capture only a restricted set of discriminative image
+features, thereby limiting classification performance. To address
+these challenges, this study introduces a comprehensive com
+putational framework for automated GC classification using
+245,196 histopathological images divided into two categories.
+The pipeline integrates data preprocessing with multiple filtering
+strategies, feature extraction, feature selection, and a CNN
+Attention-LSTM (CALNet) classifier. For feature extraction,
+three pre-trained CNN models were fine-tuned under diverse
+parameter configurations through transfer learning to obtain
+discriminative representations. Subsequently, Local Interpretable
+Model-Agnostic Explanations (LIME) was employed as a feature
+selection strategy to discard non-informative attributes and
+enhance generalization. Finally, the proposed CALNet model was
+utilized to ensure reliable and interpretable predictions. Our
+framework achieved an accuracy of 98.74%, AUC of 98.47%,
+specificity of 91.00%, precision of 98.15%, and MCC of 91.21%.
+Experimental outcomes demonstrate that the proposed approach
+substantially outperforms existing methodologies, underscoring
+its potential to serve as a clinical decision-support system for
+gastric cancer diagnosis.</p>
+                    
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🔗</a>
+                    </div>
+                </div>
+            </div>
+
+
+             
+
+            <!-- JOURNAL PAPERS -->
+            <div class="research-section-label" style="margin-top: 3.5rem;">
+                <span class="research-badge badge-journal">📰 Journal Articles</span>
+                <h3>Peer-Reviewed Journals</h3>
+            </div>
+            <div class="research-divider" style="background: linear-gradient(90deg,#0a0a0a,transparent);"></div>
+
+            <div class="research-card journal-card">
+                <div class="project-header" style="background: linear-gradient(135deg,#201e1d,#f59e0b);">
+                    <h3>📰XAI-AttBiLSTM: an explainable two-stage feature selection framework 
+with Attention-based BiLSTM for gynecological cancer risk module 
+identification</h3>
+                </div>
+                <div class="project-body">
+                    <p><strong>Authors:</strong> Mst. Mostary Khatun1 · Francis Rudra D Cruze2,3 · Mst. Amina Khatun4 · Md. Faruk Hosen3,4
+Muhammad Shahin Uddin1 · Monir Morshed1</p>
+                    <p style="margin-top:0.5rem; color:#555;"><strong>Journal:</strong>XAI-AttBiLSTM: an explainable two-stage feature selection framework 
+with Attention-based BiLSTM for gynecological cancer risk module , Accepted: 17 January 2026</p>
+                    <p style="margin-top:0.25rem; color:#888; font-size:0.88rem;"><strong>Publisher:</strong>  Springer Nature 2026 &nbsp;|&nbsp; <strong>Impact Factor:</strong> 2.0 &nbsp;|&nbsp; <strong>Indexed:</strong> Scopus</p>
+                    <p style="margin-top:0.5rem; color:#555;">Gynecological	cancers	(GC)	rank	among	the	most	common	cancers	affecting	women	and	are	leading	causes	of	cancer
+related	morbidity	and	mortality	worldwide.	Despite	notable	clinical	progress,	effective	early	diagnostic	biomarkers	and	tar
+geted therapeutic options are still lacking. In this study, we propose a comprehensive machine learning and bioinformatics 
+framework to identify potential biomarkers and therapeutic compounds for GC. Initially, four gene expression microarray 
+datasets	were	used	to	extract	a	preliminary	set	of	differentially	expressed	genes	(DEGs).	We	employed	a	two-step	feature	
+selection	approach:	first,	Boruta	was	applied,	followed	by	LIME	as	the	final	feature	selection	technique.	The	final	gene	
+subset	was	then	fed	into	our	Attention-based	Bidirectional	Long	Short-Term	Memory	(AttBiLSTM)	model,	which	demon
+strated	better	predictive	performance	compared	to	other	classifiers.	Thirty	common	genes,	resulting	from	the	intersection	
+of	DEGs	and	the	gene	subset	derived	from	machine	learning,	were	identified.	Gene	Ontology	(GO)	and	KEGG	pathway	
+enrichment analysis revealed enrichment in biological processes associated with GC. The protein-protein interactions (PPI) 
+network	identified	10	hub	genes:	TK1,	CRMP1,	KIF5A,	TUBB2A,	METTL20,	TSC2,	RHEB,	A2M,	UBC,	and	RBM48.	
+The	transcription	factor	(TF)	regulatory	network	added	the	TF-gene	and	TF-miRNA	interactions	and	identified	five	core	
+regulators	that	had	regulatory	network	associations	in	the	PPI.	Molecular	docking	also	identified	that	five	of	the	candidate	
+targets	had	strong	binding	affinity	with	four	GC	drugs.	These	findings	indicate	that	the	identified	hub	genes	show	potential	
+as biomarkers for early detection and prognosis, while the associated compounds may serve as promising candidates for 
+the therapeutic development of GC.</p>
+                
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🔗 https://doi.org/10.1007/s13721-026-00739-x</a>
+                        
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </div>
+    </section>
+
+    <!-- ── PRESENTATIONS ── -->
+    <section id="presentations">
+        <div class="container">
+            <h2 class="section-title">Presentations &amp; Talks</h2>
+            <div class="pres-grid">
+                <div class="pres-card">
+                    <div class="pres-type">📢 Conference Presentation</div>
+                    <h3>Gastric Cancer Classification Using a Hybrid CNN-Attention-LSTM Model with Deep Feature Extraction</h3>
+                    <p>Chittagong University of Engineering and Technology (CUET), Chattogram, Bangladesh</p>
+                    <p>I will present the conference paper at 2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence and Networking (QPAIN 2026)</p>
+                    <span class="pres-date">April 2026</span>
+                </div>
+            
+                <div class="pres-card">
+                    <div class="pres-type">🏆 AI Fest Competition</div>
+                    <h3>AI Fest 2025</h3>
+                    <p>Daffodil International University, Savar, Dhaka</p>
+                    <p>I presented a solution for DIU accounts clearance for graduating students at the Knowledge Tower. The project focused on simplifying and improving the student clearance process efficiently. Through this presentation, I demonstrated problem-solving and system improvement ideas. Among all participants, I achieved 4th rank for the presented solution.</p>
+                    <span class="pres-date">December 2025</span>
+                </div>
+                
+                <div class="pres-card">
+                    <div class="pres-type">📊 Poster Presentation</div>
+                    <h3>A Stacked Ensemble Learning Approach with Two-Stage Gene 
+Selection for Identifying Biomarkers and Molecular Pathways in 
+Oral Cancer and Periodontal Disease</h3>
+                    <p>Venue: Daffodil International University</p>
+                    <p>Presented research poster on Oral Cancer and Periodontal Disease to Poster Presentation Competition.</p>
+                    <span class="pres-date">May 2026</span>
+                </div>
+                 <div class="pres-card">
+                    <div class="pres-type">📊 Poster Presentation</div>
+                    <h3>An innovative framework for ovarian cancer classification and detection.</h3>
+                    <p> Venue: Daffodil International University</p>
+                    <p>Presented research poster on ovarian Cancer to Poster Presentation Competition.</p>
+                    <span class="pres-date">May 2025</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── CERTIFICATE MODAL ── -->
+    <div class="cert-modal-overlay" id="certModal">
+        <div class="cert-modal-box">
+            <div class="cert-modal-header">
+                <h3 id="certModalTitle">Certificate Preview</h3>
+                <button class="cert-modal-close" onclick="closeCertModal()">✕</button>
+            </div>
+            <div class="cert-modal-body" id="certModalBody">
+                <!-- content injected by JS -->
+            </div>
+            <div class="cert-modal-footer">
+                <a id="certModalDownload" href="#" download class="cert-link" style="text-decoration:none;">⬇ Download</a>
+                <button class="cert-link" style="border:none;cursor:pointer;" onclick="closeCertModal()">✕ Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CERTIFICATES ── -->
+    <section id="certificates" class="section-light">
+        <div class="container">
+            <h2 class="section-title">Certificates &amp; Achievements</h2>
+            <div class="certificates-grid">
+                
+                 <!-- CERT 1-->
+                <div class="certificate-card ">
+                    <img src="e:\Amina's portfolio\amina_portfolio\Amina Khatun.png" alt="AI FEST 2025 Certificate of Participation" class="cert-image"
+                        onclick="openCertModalDirect('Amina Khatun.png','image','AI FEST 2025 — Certificate of Participation (Promtx)')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>AI FEST 2025 — Participation (Promtx)</h3>
+                        <p class="cert-role">Daffodil International University — Dept. of CIS</p>
+                        <p style="color:#666; font-size:0.85rem; margin-bottom:0.75rem;">Actively participated in the Promtx segment of AI FEST 2025, held 26–29 Nov & 1 Dec 2025 at Daffodil International University.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('Amina Khatun.png','image','image','AI FEST 2025 — Certificate of Participation (Promtx)')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                <!-- CERT 2 -->
+                 <div class="certificate-card">
+                   <div class="certificate-card cert-card-image">
+                    <img src="e:\Amina's portfolio\amina_portfolio\Amina Khatun (1).png" alt="AI FEST 2025 Project Showcasing Certificate" class="cert-image"
+                        onclick="openCertModalDirect('Amina Khatun (1).png','image','AI FEST 2025 — Certificate of Participation (Project Showcasing)')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                       <h3>AI FEST 2025 — Participation (Project Showcasing)</h3>
+                        <p class="cert-role">Daffodil International University — Dept. of CIS</p>
+                        <p style="color:#666; font-size:0.85rem; margin-bottom:0.75rem;">Actively participated in Project Showcasing segment of AI FEST 2025, held 26–29 Nov & 1 Dec 2025 at Daffodil International University.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('Amina Khatun (1).png','image','AI FEST 2025 — Certificate of Participation (Project Showcasing)')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                </div>
+
+                <!-- CERT 3 -->
+                <div class="certificate-card">
+                    <img src="E:\Amina's portfolio\amina_portfolio\poster_presentation.jpeg" alt="DIU-DoR Poster Presentation Certificate" class="cert-image"
+                        onclick="openCertModalDirect('poster_presentation.jpeg','image','DIU-DoR Poster Presentation 2025 — Certificate of Achievement')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>DIU-DoR Poster Presentation 2025</h3>
+                        <p class="cert-role">Daffodil International University — 14 May 2025</p>
+                        <p style="color:#666; font-size:0.85rem; margin-bottom:0.75rem;">Certificate of Achievement for participation in DIU-DoR Poster Presentation 2025 — "Future Leaders in Research", Dept. of Computing and Information System.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('poster_presentation.jpeg','image','DIU-DoR Poster Presentation 2025 — Certificate of Achievement')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                 <!-- CERT 4 -->
+                <div class="certificate-card">
+                    <div class="cert-icon">🏅</div>
+                    <img src="E:\Amina's portfolio\amina_portfolio\Paper ID_ 10324_page-0001.jpg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('Paper ID_ 10324_page-0001.jpg','image','IDAA 2025 — Certificate of Appreciation (Paper ID: 10324)')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                         <h3>IDAA 2025 — Certificate of Appreciation</h3>
+                        <p class="cert-role">International Conference on Intelligent Data Analysis and Applications — Dec 2025</p>
+                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Paper accepted & presented: "Enhanced Prediction of Interleukin-13 Inducing Peptides Using Sequence Embedding and CNN Classifier" (Paper ID: 10324), Daffodil International University, Dhaka.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('Paper ID_ 10324_page-0001.jpg','image','IDAA 2025 — Certificate of Appreciation (Paper ID: 10324)')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                <!-- CERT 5 -->
+                <div class="certificate-card">
+                     <div class="cert-icon">🧬</div>
+                     <div class="certificate-card cert-card-image">
+                    <img src="E:\Amina's portfolio\amina_portfolio\certificate of biomedical image analysis in python_page-0001.jpg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('certificate of biomedical image analysis in python_page-0001.jpg','image')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>Biomedical Image Analysis in Python</h3>
+                    <p class="cert-role">DataCamp — Statement of Accomplishment</p>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Successfully completed 4-hour course on Biomedical Image Analysis in Python. Covers image segmentation, classification, and feature extraction from medical imaging data. Completed Dec 05, 2025.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('certificate of biomedical image analysis in python_page-0001.jpg','image')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+                </div>        
+
+                <!-- CERT 6 — pre-loaded image -->
+                <div class="certificate-card">
+                    <div class="cert-icon">🖼️</div>
+                    <img src="E:\Amina's portfolio\amina_portfolio\certificate of image processing in python_page-0001.jpg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('certificate of image processing in python_page-0001.jpg','image','DataCamp — Image Processing in Python')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>Image Processing in Python</h3>
+                    <p class="cert-role">DataCamp — Statement of Accomplishment</p>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Successfully completed 4-hour course on Image Processing in Python covering core techniques for image manipulation, filtering, and analysis using Python. Completed Dec 02, 2025.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('certificate of image processing in python_page-0001.jpg','image','DataCamp — Image Processing in Python')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+               
+
+                <!-- CERT 7 -->
+                <div class="certificate-card">
+                     <div class="cert-icon">📈</div>
+                    <img src="E:\Amina's portfolio\amina_portfolio\Time series ML _page-0001.jpg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('Time series ML _page-0001.jpg','image','DataCamp — Machine Learning for Time Series Data in Python')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>Machine Learning for Time Series Data in Python</h3>
+                    <p class="cert-role">DataCamp — Statement of Accomplishment</p>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Successfully completed 4-hour course on Machine Learning for Time Series Data in Python. Covers forecasting, feature engineering, and ML models for sequential data. Completed Nov 30, 2025.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('Time series ML _page-0001.jpg','image','DataCamp — Machine Learning for Time Series Data in Python')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                
+                <!-- CERT 8-->
+                <div class="certificate-card">
+                    <img src="E:\Amina's portfolio\amina_portfolio\Completion of Data Engineering .jpeg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('Completion of Data Engineering .jpeg','image')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                        <h3>Completion of Data Engineering </h3>
+                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Successfully completed data engineering.Data engineering focuses on designing, building, and maintaining systems that collect, store, and process large volumes of data efficiently. It ensures that raw data from multiple sources is transformed into clean, reliable datasets for analysis and decision-making. By creating scalable pipelines and robust data architectures, data engineers enable organizations to access accurate information in real time. This work forms the backbone of analytics, machine learning, and business intelligence systems.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('Completion of Data Engineering .jpeg','image')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+                 <!-- CERT 9-->
+                <div class="certificate-card">
+                     <div class="cert-icon">🏃</div>
+                    <img src="E:\Amina's portfolio\amina_portfolio\certificate running community11 new_ -Mst amina khatun_page-0001.jpg" alt="Certificate Image" class="cert-image"
+                        onclick="openCertModalDirect('certificate running community11 new_ -Mst amina khatun_page-0001.jpg','image')"
+                        style="cursor:pointer;" title="Click to preview">
+                    <div class="cert-info">
+                       <h3>25th DIU Founding Anniversary Run 2026</h3>
+                    <p class="cert-role">Daffodil Running Community — Silver Jubilee Edition</p>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Successfully completed the 25th DIU Founding Anniversary Run 2026 (Silver Jubilee — Edition 1) held on 24th January 2026 at Daffodil Smart City, Dhaka. Category: 7.5 KM, BIB No: 25873.</p>
+                        <button class="cert-view-btn" onclick="openCertModalDirect('certificate running community11 new_ -Mst amina khatun_page-0001.jpg','image')" style="margin-top:0.5rem;">👁 View Certificate</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="section-light">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <a href="mailto:amina2312091018@diu.edu.bd">Open Email</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">💼</div>
+                    <h3>LinkedIn</h3>
+                    <a href="https://www.linkedin.com/in/amina-khatun-ba573a374/" target="_blank">Linkedin profile</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🆔</div>
+                    <h3>ORCID</h3>
+                    <a href="https://orcid.org/0009-0007-4071-7005" target="_blank">0009-0007-4071-7005</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">⚡</div>
+                    <h3>Research_Gate</h3>
+                    <a href="https://www.researchgate.net/profile/Mstamina-Khatun/research" target="_blank">Research_profile</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📚</div>
+                    <h3>Google Scholar</h3>
+                    <a href="https://scholar.google.com/citations?hl=en&user=mXJ_WzwAAAAJ" target="_blank">View Publications</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🏛️</div>
+                    <h3>Institution</h3>
+                    <a href="https://daffodilvarsity.edu.bd/" target="_blank">[Daffodil International University]</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Mst. Amina Khatun. Crafted with passion and code.</p>
+        <p style="margin-top: 0.5rem; color: #888;">Department of CIS,Daffodil International University, Bangladesh</p>
+    </footer>
+
+    <script>
+   
+    function initGallery(galleryId) {
+        const gallery = document.getElementById(galleryId);
+        const imgs = gallery.querySelectorAll('img');
+        const dotsEl = gallery.querySelector('.gallery-dots');
+        const countEl = gallery.querySelector('.img-count');
+        let cur = 0;
+
+        imgs.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.onclick = () => goTo(i);
+            dotsEl.appendChild(d);
+        });
+
+        function goTo(n) {
+            imgs[cur].classList.remove('active');
+            gallery.querySelectorAll('.dot')[cur].classList.remove('active');
+            cur = (n + imgs.length) % imgs.length;
+            imgs[cur].classList.add('active');
+            gallery.querySelectorAll('.dot')[cur].classList.add('active');
+            countEl.textContent = (cur + 1) + ' / ' + imgs.length;
+        }
+
+        gallery._goTo = goTo;
+        gallery._getCur = () => cur;
+    }
+
+    function changeSlide(galleryId, dir) {
+        const gallery = document.getElementById(galleryId);
+        gallery._goTo(gallery._getCur() + dir);
+    }
+    initGallery('gallery-1');
+    initGallery('gallery-2');
+    initGallery('gallery-3');
+    initGallery('gallery-4');
+    initGallery('gallery-5');
+    initGallery('gallery-6');
+
+        // ── Three.js animated background ──
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+        const material = new THREE.MeshStandardMaterial({ color: 0x6366f1, wireframe: true });
+        const torus = new THREE.Mesh(geometry, material);
+        scene.add(torus);
+
+        const pointLight = new THREE.PointLight(0xffffff);
+        pointLight.position.set(5, 5, 5);
+        const ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(pointLight, ambientLight);
+        camera.position.z = 30;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            torus.rotation.x += 0.01;
+            torus.rotation.y += 0.005;
+            torus.rotation.z += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // ── Typing effect ──
+        const phrases = [
+            'Researcher & Engineer',
+            'AI / ML Enthusiast',
+            'Published Author',
+            'Deep Learning Practitioner',
+            '[Your University] — [Department]'
+        ];
+        let phraseIndex = 0, charIndex = 0, isDeleting = false;
+
+        function typeEffect() {
+            const current = phrases[phraseIndex];
+            const typingText = document.getElementById('typingText');
+            if (isDeleting) {
+                typingText.textContent = current.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = current.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            if (!isDeleting && charIndex === current.length) {
+                setTimeout(() => isDeleting = true, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+            }
+            setTimeout(typeEffect, isDeleting ? 50 : 100);
+        }
+        typeEffect();
+
+        // ── Smooth scrolling ──
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // ── Navbar scroll effect ──
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ── Profile image fallback ──
+        const profileImg = document.getElementById('profileImg');
+        profileImg.onerror = function() {
+            this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%236366f1" width="200" height="200" rx="100"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="70" fill="white"%3EAK%3C/text%3E%3C/svg%3E';
+        };
+
+        // ── Scroll reveal animations ──
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -80px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skill-card, .project-card, .research-card, .timeline-item, .contact-card, .certificate-card, .pres-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // ── PROJECT IMAGE PREVIEW ──
+        function previewProjectImg(input, thumbId) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const container = document.getElementById(thumbId);
+                container.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;cursor:pointer;';
+                img.title = 'Click to change image';
+                img.onclick = function() {
+                    const inp = document.createElement('input');
+                    inp.type = 'file'; inp.accept = 'image/*';
+                    inp.onchange = function() { previewProjectImg(this, thumbId); };
+                    inp.click();
+                };
+                container.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ── CERTIFICATE UPLOAD & STORE ──
+        const certStore = {};
+
+        function handleCertUpload(input, idx) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            const isImage = file.type.startsWith('image/');
+            const isPDF = file.type === 'application/pdf';
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                certStore[idx] = { dataUrl: e.target.result, type: isImage ? 'image' : 'pdf', name: file.name };
+
+                // Hide upload zone, show preview
+                const zone = document.getElementById('cert-zone-' + idx);
+                if (zone) zone.style.display = 'none';
+
+                const preview = document.getElementById('cert-preview-' + idx);
+                if (preview) {
+                    preview.style.display = 'block';
+                    if (isImage) {
+                        preview.innerHTML = `<img src="${e.target.result}" class="cert-preview-thumb" title="Click to change" onclick="rechoseCert(${idx})">
+                            <br><small style="color:#888;font-size:0.75rem;cursor:pointer;" onclick="rechoseCert(${idx})">🔄 Change file</small>`;
+                    } else {
+                        preview.innerHTML = `<div style="padding:1rem;background:#f8fafc;border-radius:8px;margin-bottom:0.5rem;">
+                            <div style="font-size:2rem;">📄</div>
+                            <div style="color:var(--primary);font-weight:600;font-size:0.85rem;">${file.name}</div>
+                            <small style="color:#888;">PDF ready to view</small>
+                        </div>
+                        <br><small style="color:#888;font-size:0.75rem;cursor:pointer;" onclick="rechoseCert(${idx})">🔄 Change file</small>`;
+                    }
+                }
+                const btn = document.getElementById('cert-btn-' + idx);
+                if (btn) btn.style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function rechoseCert(idx) {
+            certStore[idx] = null;
+            const zone = document.getElementById('cert-zone-' + idx);
+            if (zone) zone.style.display = 'block';
+            const preview = document.getElementById('cert-preview-' + idx);
+            if (preview) { preview.style.display = 'none'; preview.innerHTML = ''; }
+            const btn = document.getElementById('cert-btn-' + idx);
+            if (btn) btn.style.display = 'none';
+        }
+
+        function openCertModal(idx, title) {
+            const data = certStore[idx];
+            if (!data) return;
+            document.getElementById('certModalTitle').textContent = title;
+            const body = document.getElementById('certModalBody');
+            const dl = document.getElementById('certModalDownload');
+            if (data.type === 'image') {
+                body.innerHTML = `<img src="${data.dataUrl}" style="max-width:100%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);">`;
+            } else {
+                body.innerHTML = `<iframe src="${data.dataUrl}" style="width:100%;height:60vh;border:none;border-radius:8px;"></iframe>`;
+            }
+            dl.href = data.dataUrl;
+            dl.download = data.name || 'certificate';
+            document.getElementById('certModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openCertModalDirect(src, type, title) {
+            document.getElementById('certModalTitle').textContent = title;
+            const body = document.getElementById('certModalBody');
+            const dl = document.getElementById('certModalDownload');
+            if (type === 'image') {
+                body.innerHTML = `<img src="${src}" style="max-width:100%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);">`;
+            } else {
+                body.innerHTML = `<iframe src="${src}" style="width:100%;height:60vh;border:none;border-radius:8px;"></iframe>`;
+            }
+            dl.href = src;
+            dl.download = src.split('/').pop();
+            document.getElementById('certModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCertModal() {
+            document.getElementById('certModal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('certModalBody').innerHTML = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('certModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCertModal();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeCertModal();
+        });
+    </script>
+</body>
+</html>
